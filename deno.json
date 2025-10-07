@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "dev": "deno serve --watch ./main.ts",
+    "generate": "deno --allow-write=./redirects.json --allow-net=api.github.com:443 --allow-env=GH_TOKEN,GITHUB_TOKEN ./generate_redirects.ts"
+  },
+  "imports": {
+    "octokit": "npm:octokit@^5.0.3"
+  }
+}
