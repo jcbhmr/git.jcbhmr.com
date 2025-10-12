@@ -1,19 +1,12 @@
 #!/usr/bin/env -S deno serve
-import redirectsJSON from "./redirects.json" with { type: "json" };
-
-const redirects = Object.assign({ __proto__: null! }, redirectsJSON) as Record<
-  string,
-  string
->;
-
+const pattern = new URLPattern({ pathname: "/:repo.git" });
 export default {
   fetch(request) {
-    const url = new URL(request.url);
-    const destURL = redirects[url.pathname];
-    if (destURL != null) {
-      return Response.redirect(destURL, 307);
-    } else {
+    const match = pattern.exec(request.url);
+    if (match == null) {
       return new Response(null, { status: 404 });
     }
+    const repo = match.pathname.groups;
+    return Response.redirect(`https://github.com/jcbhmr/${repo}.git`);
   },
 } satisfies Deno.ServeDefaultExport;
